@@ -38,7 +38,7 @@ jobs:
           # Extract the branch name from the ref
           branch_name=$(echo "${{ github.ref }}" | sed 's#refs/heads/##')
           echo "branch=${branch_name}" >> $GITHUB_ENV
-          echo "::set-output name=branch::${branch_name}"
+          echo "branch=${branch_name}" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
