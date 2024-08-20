@@ -20,7 +20,7 @@ jobs:
 
       - name: Build project
         run: |
-          echo "Building from branch ${{ github.event.inputs.branch }}"
+          echo "Building from branch main"
 
   test:
     runs-on: ubuntu-latest
