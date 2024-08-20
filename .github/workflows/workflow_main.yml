@@ -22,20 +22,20 @@ jobs:
     outputs:
       branch: ${{ steps.set-branch.outputs.branch }}
     steps:
-      - name: Set branch name
-        id: set-branch
-        run: |
-          # Extract the branch name from the ref
-          branch_name=$(echo "${{ github.ref }}" | sed 's#refs/heads/##')
-          echo "branch=${branch_name}" >> $GITHUB_ENV
-          echo "::set-output name=branch::${branch_name}"
-
       - name: Checkout code
         id: checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
           ref: ${{ inputs.checkout-ref }}
+
+      - name: Set branch output
+        id: set-branch
+        run: |
+          # Extract the branch name from the ref
+          branch_name=$(echo "${{ github.ref }}" | sed 's#refs/heads/##')
+          echo "branch=${branch_name}" >> $GITHUB_ENV
+          echo "::set-output name=branch::${branch_name}"
 
   build:
     runs-on: ubuntu-latest
