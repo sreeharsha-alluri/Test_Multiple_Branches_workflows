@@ -38,6 +38,7 @@ jobs:
     needs: preparation
     steps:
       - name: Checkout code
+        id: checkout-build
         uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -51,6 +52,7 @@ jobs:
     needs: build
     steps:
       - name: Checkout code
+        id: checkout-test
         uses: actions/checkout@v3
         with:
           submodules: recursive
@@ -64,6 +66,7 @@ jobs:
     needs: test
     steps:
       - name: Checkout code
+        id: checkout-deploy
         uses: actions/checkout@v3
         with:
           submodules: recursive
