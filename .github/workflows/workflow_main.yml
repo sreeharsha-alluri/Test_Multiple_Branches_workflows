@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Build stage
-        run: echo "Build from main branch..."
+        run: echo "Build from deploy branch..."
 
   test:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Test stage
-        run: echo "Test from main branch..."
+        run: echo "Test from deploy branch..."
 
   deploy:
     runs-on: ubuntu-latest
