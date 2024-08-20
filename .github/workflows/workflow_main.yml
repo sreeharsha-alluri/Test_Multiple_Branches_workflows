@@ -34,7 +34,7 @@ jobs:
     needs: preparation
     steps:
       - name: Build stage
-        run: echo "Build from main branch"
+        run: echo "Build from ${{ needs.preparation.outputs.branch }} branch"
 
   test:
     runs-on: ubuntu-latest
