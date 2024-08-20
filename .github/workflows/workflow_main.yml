@@ -31,7 +31,7 @@ jobs:
 
       - name: Set branch output
         id: set-branch
-        run: echo "branch=${{ inputs.checkout-ref }}" >> $GITHUB_ENV
+        run: echo "branch=${{ inputs.checkout-ref }}" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
           ref: ${{ needs.preparation.outputs.branch }}
 
       - name: Build stage
-        run: echo "Build from main branch"
+        run: echo "Build from ${{ needs.preparation.outputs.branch }} branch"
 
   test:
     runs-on: ubuntu-latest
