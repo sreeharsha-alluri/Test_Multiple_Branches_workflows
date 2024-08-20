@@ -24,6 +24,11 @@ jobs:
           submodules: recursive
           ref: ${{ inputs.branch }}
 
+      - name: Set branch output
+        id: set-branch
+        run: |
+          echo "branch=${{ inputs.branch }}" >> $GITHUB_OUTPUT
+
   build:
     runs-on: ubuntu-latest
     needs: preparation
