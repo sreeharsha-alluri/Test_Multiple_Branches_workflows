@@ -13,16 +13,32 @@ on:
         type: string
 
 jobs:
-  build:
+  preparation:
     runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.set-branch.outputs.branch }}
     steps:
       - name: Checkout code
+        id: checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.branch }}
       
+      - name: Set branch output
+        id: set-branch
+        run: echo "::set-output name=branch::${{ github.event.inputs.branch }}"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: preparation
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.preparation.outputs.branch }}
+      
       - name: Build stage
-        run: echo "Build from ${{ github.event.inputs.branch }} branch"
+        run: echo "Build from ${{ needs.preparation.outputs.branch }} branch"
 
   test:
     runs-on: ubuntu-latest
@@ -31,10 +47,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ needs.preparation.outputs.branch }}
       
       - name: Test stage
-        run: echo "Test from ${{ github.event.inputs.branch }} branch"
+        run: echo "Test from ${{ needs.preparation.outputs.branch }} branch"
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,7 +59,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ needs.preparation.outputs.branch }}
       
       - name: Deploy stage
-        run: echo "Deploy from ${{ github.event.inputs.branch }} branch"
+        run: echo "Deploy from ${{ needs.preparation.outputs.branch }} branch"
