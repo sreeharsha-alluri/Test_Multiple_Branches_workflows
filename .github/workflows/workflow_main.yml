@@ -11,6 +11,10 @@ on:
         required: true
         default: "main"
         type: string
+      checkout-ref:
+        description: "Ref of the repo to checkout"
+        required: true
+        type: string
 
 jobs:
   preparation:
@@ -22,11 +26,12 @@ jobs:
         id: checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.branch }}
+          submodules: recursive
+          ref: ${{ inputs.checkout-ref }}
 
       - name: Set branch output
         id: set-branch
-        run: echo "branch=${{ github.event.inputs.branch }}" >> $GITHUB_ENV
+        run: echo "branch=${{ inputs.checkout-ref }}" >> $GITHUB_ENV
 
   build:
     runs-on: ubuntu-latest
@@ -35,10 +40,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          submodules: recursive
           ref: ${{ needs.preparation.outputs.branch }}
 
       - name: Build stage
-        run: echo "Build from ${{ needs.preparation.outputs.branch }} branch"
+        run: echo "Build from main branch"
 
   test:
     runs-on: ubuntu-latest
@@ -47,6 +53,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          submodules: recursive
           ref: ${{ needs.preparation.outputs.branch }}
 
       - name: Test stage
@@ -59,6 +66,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          submodules: recursive
           ref: ${{ needs.preparation.outputs.branch }}
 
       - name: Deploy stage
