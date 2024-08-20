@@ -13,38 +13,37 @@ on:
         type: string
 
 jobs:
-  preparation:
-    runs-on: ubuntu-latest
-    outputs:
-      branch: ${{ steps.set-branch.outputs.branch }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          ref: ${{ inputs.branch }}
-
-      - name: Set branch output
-        id: set-branch
-        run: echo "branch=${{ inputs.branch }}" >> $GITHUB_ENV
-
   build:
     runs-on: ubuntu-latest
-    needs: preparation
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      
       - name: Build stage
-        run: echo "Build from ${{ env.branch }} branch"
+        run: echo "Build from ${{ github.event.inputs.branch }} branch"
 
   test:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      
       - name: Test stage
-        run: echo "Test from ${{ env.branch }} branch"
+        run: echo "Test from ${{ github.event.inputs.branch }} branch"
 
   deploy:
     runs-on: ubuntu-latest
     needs: test
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      
       - name: Deploy stage
-        run: echo "Deploy from ${{ env.branch }} branch"
+        run: echo "Deploy from ${{ github.event.inputs.branch }} branch"
