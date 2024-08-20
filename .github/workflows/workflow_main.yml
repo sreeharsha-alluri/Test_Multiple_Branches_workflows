@@ -1,9 +1,6 @@
-name: CI Pipeline
+name: Build and Test Workflow
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       branch:
@@ -11,36 +8,33 @@ on:
         required: true
         default: "main"
         type: string
+      checkout-ref:
+        description: "Ref of the repo to checkout"
+        required: true
+        type: string
 
 jobs:
-  preparation:
-    runs-on: ubuntu-latest
-    outputs:
-      branch: ${{ steps.set-branch.outputs.branch }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          ref: ${{ inputs.branch }}
-
   build:
     runs-on: ubuntu-latest
-    needs: preparation
     steps:
-      - name: Build stage
-        run: echo "Build from test branch"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.checkout-ref }}
+
+      - name: Build project
+        run: |
+          echo "Building from branch ${{ github.event.inputs.branch }}"
 
   test:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Test stage
-        run: echo "Test from ${{ needs.preparation.outputs.branch }} branch"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.checkout-ref }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Deploy stage
-        run: echo "Deploy from ${{ needs.preparation.outputs.branch }} branch"
+      - name: Test project
+        run: |
+          echo "Testing the project on branch ${{ github.event.inputs.branch }}"
