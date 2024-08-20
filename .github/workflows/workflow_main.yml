@@ -20,7 +20,9 @@ jobs:
   preparation:
     runs-on: ubuntu-latest
     outputs:
-      branch: ${{ steps.set-branch.outputs.branch }}
+      branch:
+        description: 'The branch to use in subsequent jobs'
+        value: ${{ steps.set-branch.outputs.branch }}
     steps:
       - name: Checkout code
         id: checkout
@@ -31,7 +33,7 @@ jobs:
 
       - name: Set branch output
         id: set-branch
-        run: echo "branch=${{ inputs.checkout-ref }}" >> $GITHUB_OUTPUT
+        run: echo "branch=${{ inputs.checkout-ref }}" >> $GITHUB_ENV
 
   build:
     runs-on: ubuntu-latest
