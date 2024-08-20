@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Build stage
-        run: echo "Build from test branch..."
+        run: echo "Build from ${{ github.event.inputs.branch }} branch"
 
   test:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Test stage
-        run: echo "Test from test branch..."
+        run: echo "Test from ${{ github.event.inputs.branch }} branch"
 
   deploy:
     runs-on: ubuntu-latest
@@ -40,4 +40,4 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Deploy stage
-        run: echo "Deploy from ${{ github.event.inputs.branch }} branch..."
+        run: echo "Deploy from ${{ github.event.inputs.branch }} branch"
