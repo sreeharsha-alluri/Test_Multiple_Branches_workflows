@@ -20,9 +20,7 @@ jobs:
   preparation:
     runs-on: ubuntu-latest
     outputs:
-      branch:
-        description: 'The branch to use in subsequent jobs'
-        value: ${{ steps.set-branch.outputs.branch }}
+      branch: ${{ steps.set-branch.outputs.branch }}
     steps:
       - name: Checkout code
         id: checkout
@@ -56,10 +54,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          ref: ${{ needs.preparation.outputs.branch }}
+          ref: ${{ needs.build.outputs.branch }}
 
       - name: Test stage
-        run: echo "Test from ${{ needs.preparation.outputs.branch }} branch"
+        run: echo "Test from ${{ needs.build.outputs.branch }} branch"
 
   deploy:
     runs-on: ubuntu-latest
@@ -69,7 +67,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          ref: ${{ needs.preparation.outputs.branch }}
+          ref: ${{ needs.test.outputs.branch }}
 
       - name: Deploy stage
-        run: echo "Deploy from ${{ needs.preparation.outputs.branch }} branch"
+        run: echo "Deploy from ${{ needs.test.outputs.branch }} branch"
