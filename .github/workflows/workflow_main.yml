@@ -29,6 +29,9 @@ jobs:
           submodules: recursive
           ref: ${{ inputs.checkout-ref }}
 
+      - name: Debug GitHub Ref
+        run: echo "GitHub Ref: ${{ github.ref }}"
+
       - name: Set branch output
         id: set-branch
         run: |
@@ -41,6 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: preparation
     steps:
+      - name: Debug Branch Name
+        run: echo "Branch from preparation: ${{ needs.preparation.outputs.branch }}"
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -54,6 +60,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Debug Branch Name
+        run: echo "Branch from build: ${{ needs.build.outputs.branch }}"
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -67,6 +76,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
+      - name: Debug Branch Name
+        run: echo "Branch from test: ${{ needs.test.outputs.branch }}"
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
