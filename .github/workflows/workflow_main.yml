@@ -1,9 +1,6 @@
-name: CI Pipeline
+name: Build and Test Workflow
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       branch:
@@ -17,60 +14,27 @@ on:
         type: string
 
 jobs:
-  preparation:
-    runs-on: ubuntu-latest
-    outputs:
-      branch: ${{ steps.set-branch.outputs.branch }}
-    steps:
-      - name: Checkout code
-        id: checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          ref: ${{ inputs.checkout-ref }}
-
-      - name: Set branch output
-        id: set-branch
-        run: |
-          branch_name=$(echo "${{ inputs.checkout-ref }}" | sed 's#refs/heads/##')
-          echo "branch=${branch_name}" >> $GITHUB_ENV
-          echo "branch=${branch_name}" >> $GITHUB_OUTPUT
-
   build:
     runs-on: ubuntu-latest
-    needs: preparation
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          submodules: recursive
-          ref: ${{ needs.preparation.outputs.branch }}
+          ref: ${{ github.event.inputs.checkout-ref }}
 
-      - name: Build stage
-        run: echo "Build from ${{ needs.preparation.outputs.branch }} branch"
+      - name: Build project
+        run: |
+          echo "Building from branch ${{ github.event.inputs.branch }}"
 
   test:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          submodules: recursive
-          ref: ${{ needs.build.outputs.branch }}
+          ref: ${{ github.event.inputs.checkout-ref }}
 
-      - name: Test stage
-        run: echo "Test from ${{ needs.build.outputs.branch }} branch"
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          ref: ${{ needs.test.outputs.branch }}
-
-      - name: Deploy stage
-        run: echo "Deploy from ${{ needs.test.outputs.branch }} branch"
+      - name: Test project
+        run: |
+          echo "Testing the project on branch ${{ github.event.inputs.branch }}"
