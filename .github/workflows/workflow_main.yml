@@ -5,8 +5,8 @@ on:
     inputs:
       branch:
         description: "The branch to deploy Coverity"
-        required: true
-        default: "main"
+        # required: true
+        # default: "main"
         type: string
 
 jobs:
@@ -21,16 +21,3 @@ jobs:
       - name: Build project
         run: |
           echo "Building from branch main"
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.branch }}
-
-      - name: Test project
-        run: |
-          echo "Testing the project on branch ${{ github.event.inputs.branch }}"
