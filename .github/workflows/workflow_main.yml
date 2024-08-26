@@ -5,7 +5,6 @@ on:
     inputs:
       branch:
         description: "The branch to deploy Coverity"
-        required: true
         type: string
 
 jobs:
