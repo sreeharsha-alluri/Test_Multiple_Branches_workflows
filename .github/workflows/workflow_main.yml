@@ -19,7 +19,7 @@ jobs:
 
       - name: Build project
         run: |
-          echo "Building from branch ${{ github.event.inputs.branch || github.event.workflow_dispatch.ref }}"
+          echo "Building from branch Testing"
 
   test:
     runs-on: ubuntu-latest
@@ -32,4 +32,4 @@ jobs:
 
       - name: Test project
         run: |
-          echo "Testing the project on branch ${{ github.event.inputs.branch || github.event.workflow_dispatch.ref }}"
+          echo "Testing the project on branch Testing"
