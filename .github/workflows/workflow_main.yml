@@ -21,7 +21,7 @@ jobs:
 
       - name: Build project
         run: |
-          echo "Building from branch ${{ github.event.inputs.branch || github.event.workflow_dispatch.ref }}"
+          echo "Building from branch latest branch ${{ github.event.workflow_dispatch.ref }}"
 
   test:
     runs-on: ubuntu-latest
