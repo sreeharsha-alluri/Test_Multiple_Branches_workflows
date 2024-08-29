@@ -6,8 +6,6 @@ on:
       branch:
         description: "The branch to deploy Coverity"
         type: string
-        required: true
-        default: "main"
 
 jobs:
   fetch_branches:
