@@ -5,13 +5,26 @@ on:
     inputs:
       branch:
         description: "The branch to deploy Coverity"
-        # required: true
-        # default: "main"
         type: string
+        required: true
+        default: "main"
 
 jobs:
+  fetch_branches:
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.get_branches.outputs.branches }}
+    steps:
+      - name: Call GitHub API to fetch branches
+        id: get_branches
+        run: |
+          branches=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/branches | jq -r '.[].name')
+          echo "::set-output name=branches::${branches}"
+
   build:
     runs-on: ubuntu-latest
+    needs: fetch_branches
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -20,4 +33,4 @@ jobs:
 
       - name: Build project
         run: |
-          echo "Building from branch main"
+          echo "Building from branch New_Branch"
