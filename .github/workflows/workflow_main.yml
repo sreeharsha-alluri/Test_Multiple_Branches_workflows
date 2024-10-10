@@ -1,11 +1,10 @@
-name: Build and Test Workflow
+name: second workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: "The branch to deploy Coverity"
-        type: string
+  workflow_run:
+    workflows: ["main (nightly)"]  # The name of the first workflow
+    types:
+      - completed
 
 jobs:
   build:
@@ -17,19 +16,4 @@ jobs:
           # If branch is provided as input, use it; otherwise, fallback to workflow_dispatch ref
           ref: ${{ github.event.inputs.branch || github.event.workflow_dispatch.ref }}
 
-      - name: Build project
-        run: |
-          echo "Building from branch Testing"
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.branch || github.event.workflow_dispatch.ref }}
-
-      - name: Test project
-        run: |
-          echo "Testing the project on branch Testing"
+     
