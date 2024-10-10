@@ -1,5 +1,5 @@
 name: main first workflow
-
+run-name: Deploy INT TA (nightly)
 on:
   workflow_dispatch:
     inputs:
